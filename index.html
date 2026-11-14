@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#071124" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Student Mu🎓 | مساعد طالب جامعة مؤتة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050b18;
+      --surface: #0b162c;
+      --card: rgba(15, 30, 61, 0.88);
+      --border: rgba(56, 189, 248, 0.18);
+      --primary: #2563eb;
+      --primary-2: #3b82f6;
+      --cyan: #38bdf8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --success: #10b981;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at 90% 5%, rgba(37, 99, 235, 0.25), transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(56, 189, 248, 0.14), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 84px;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Top App Bar */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(7, 17, 36, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    .brand h1 { font-size: 1.05rem; font-weight: 800; line-height: 1.2; }
+    .brand small { color: var(--cyan); font-size: 0.74rem; display: block; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .icon-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 1.1rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .badge-count {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      background: var(--danger);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    .view { display: none; animation: fadeIn 0.2s ease; }
+    .view.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 28px rgba(2, 6, 23, 0.45);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .stat-emoji {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.12);
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+    .stat-box small { color: var(--muted); font-size: 0.78rem; display: block; }
+    .stat-box strong { font-size: 1.25rem; color: var(--cyan); }
+
+    /* Progress Bar */
+    .progress-wrap { margin-top: 8px; }
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+    }
+    .progress-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--cyan));
+      transition: width 0.35s ease;
+    }
+
+    /* Urgent Banner */
+    .urgent-card {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(15, 30, 61, 0.92));
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    .countdown-text {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--cyan);
+    }
+
+    /* Inputs & Buttons */
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: rgba(5, 11, 24, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      color: var(--text);
+      padding: 11px 12px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--cyan);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--cyan);
+      border: 1px solid var(--border);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.16);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .btn-sm { width: auto; padding: 6px 12px; font-size: 0.8rem; border-radius: 9px; }
+
+    /* Filters */
+    .pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+    .pill-btn {
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pill-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* Task / Assignment Item */
+    .task-item {
+      background: rgba(5, 11, 24, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+    .task-item.done { opacity: 0.65; }
+    .task-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .task-check-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      flex: 1;
+    }
+    .check-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--cyan);
+      background: transparent;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .check-circle.checked {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .task-title { font-weight: 700; font-size: 0.96rem; }
+    .task-item.done .task-title { text-decoration: line-through; }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .tag {
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    .tag-new { background: rgba(56, 189, 248, 0.2); color: var(--cyan); }
+    .tag-urgent { background: rgba(239, 68, 68, 0.22); color: #fca5a5; }
+    .tag-soon { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+    .tag-ok { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; }
+    .tag-course { background: rgba(37, 99, 235, 0.24); color: #bfdbfe; }
+
+    /* Mutah Links */
+    .portal-grid {
+      display: grid;
+      gap: 10px;
+    }
+    .portal-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 14px;
+      border-radius: 13px;
+      background: rgba(5, 11, 24, 0.65);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+    }
+    .portal-link strong { display: block; font-size: 0.94rem; }
+    .portal-link small { color: var(--muted); font-size: 0.78rem; }
+
+    /* Bottom Mobile Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      background: rgba(7, 17, 36, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .nav-btn span.ico { font-size: 1.25rem; }
+    .nav-btn.active { color: var(--cyan); }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      top: 72px;
+      left: 14px;
+      right: 14px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      background: #0f2042;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      border-inline-start: 4px solid var(--cyan);
+      color: #fff;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .steps-list { padding-inline-start: 20px; color: var(--muted); font-size: 0.86rem; }
+    .steps-list li { margin-bottom: 6px; }
+
+    @media (min-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-box" class="toast-box"></div>
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">🎓</div>
+      <div>
+        <h1>Student Mu</h1>
+        <small>مساعد طالب جامعة مؤتة</small>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="enable-notif-btn" class="icon-btn" title="تفعيل إشعارات Chrome">🔔</button>
+      <button id="alerts-jump-btn" class="icon-btn" title="التنبيهات">
+        📣
+        <span id="header-alert-badge" class="badge-count hidden">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="card urgent-card" id="next-deadline-card">
+        <div class="card-title">
+          <span>⏳ أقرب موعد تسليم</span>
+          <span class="tag tag-course" id="student-badge">جامعة مؤتة</span>
+        </div>
+        <div id="next-deadline-body">لا توجد واجبات متبقية حالياً 🎉</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-emoji">📋</div>
+          <div><small>المهام المتبقية</small><strong id="stat-remaining">0</strong></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-emoji">✅</div>
+          <div><small>المهام المنجزة</small><strong id="stat-done">0</strong></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-emoji">🔥</div>
+          <div><small>واجبات عاجلة</small><strong id="stat-urgent">0</strong></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-emoji">🆕</div>
+          <div><small>تنبيهات جديدة</small><strong id="stat-new">0</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📊 نسبة إنجاز الواجبات</span></div>
+        <div class="progress-wrap">
+          <div class="progress-head">
+            <span id="progress-label">0 من 0 مكتمل</span>
+            <strong id="progress-percent">0%</strong>
+          </div>
+          <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🆕 أحدث الواجبات والإعلانات</span>
+          <button class="btn btn-ghost btn-sm" onclick="switchTab('tasks')">عرض الكل</button>
+        </div>
+        <div id="dash-latest-list"></div>
+      </div>
+    </section>
+
+    <!-- 2. TASKS & ASSIGNMENTS -->
+    <section id="view-tasks" class="view">
+      <div class="card">
+        <div class="card-title"><span>➕ إضافة واجب أو إعلان مادة</span></div>
+        <form id="add-task-form">
+          <label>عنوان الواجب أو الإعلان</label>
+          <input id="t-title" type="text" required placeholder="مثال: تسليم واجب البرمجة 2 أو كويز الفيزياء" />
+
+          <div class="row-2">
+            <div>
+              <label>المادة</label>
+              <input id="t-course" type="text" required placeholder="هياكل بيانات" />
+            </div>
+            <div>
+              <label>النوع</label>
+              <select id="t-type">
+                <option value="واجب">واجب (Assignment)</option>
+                <option value="كويز">اختبار / كويز</option>
+                <option value="مشروع">مشروع</option>
+                <option value="إعلان">إعلان مادة</option>
+              </select>
+            </div>
+          </div>
+
+          <label>تاريخ ووقت التسليم (اختياري للإعلانات)</label>
+          <input id="t-due" type="datetime-local" />
+
+          <label>ملاحظات إضافية</label>
+          <textarea id="t-notes" rows="2" placeholder="التفاصيل أو رابط التسليم على مودل..."></textarea>
+
+          <button type="submit" class="btn btn-primary">حفظ وتفعيل التذكير</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📚 قائمة الواجبات والمهام</span></div>
+        <div class="pills" id="task-filters">
+          <button class="pill-btn active" data-filter="all">الكل</button>
+          <button class="pill-btn" data-filter="remaining">المتبقية</button>
+          <button class="pill-btn" data-filter="new">الجديدة 🆕</button>
+          <button class="pill-btn" data-filter="urgent">العاجلة 🔥</button>
+          <button class="pill-btn" data-filter="done">المنجزة ✅</button>
+        </div>
+        <div id="tasks-list"></div>
+      </div>
+    </section>
+
+    <!-- 3. MUTAH UNIVERSITY E-LEARNING -->
+    <section id="view-mutah" class="view">
+      <div class="card">
+        <div class="card-title"><span>🏛️ بوابات جامعة مؤتة الرسمية</span></div>
+        <div class="portal-grid">
+          <a class="portal-link" href="https://mulms.mutah.edu.jo" target="_blank" rel="noopener">
+            <div>
+              <strong>💻 منصة التعليم الإلكتروني (Moodle)</strong>
+              <small>mulms.mutah.edu.jo — المحاضرات والواجبات والإعلانات</small>
+            </div>
+            <span>↗️</span>
+          </a>
+          <a class="portal-link" href="https://app.mutah.edu.jo/studreg" target="_blank" rel="noopener">
+            <div>
+              <strong>🎓 نظام معلومات الطلبة والتسجيل</strong>
+              <small>app.mutah.edu.jo/studreg — الجدول والعلامات</small>
+            </div>
+            <span>↗️</span>
+          </a>
+          <a class="portal-link" href="https://portal1.mutah.edu.jo/eservice" target="_blank" rel="noopener">
+            <div>
+              <strong>🌐 بوابة الخدمات الإلكترونية</strong>
+              <small>portal1.mutah.edu.jo/eservice — جريدة المواد والخدمات</small>
+            </div>
+            <span>↗️</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🔄 استيراد واجباتك تلقائياً من مودل مؤتة</span></div>
+        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:10px">
+          لحماية حسابك الجامعي، لا يطلب التطبيق كلمة مرورك. بدلاً من ذلك يمكنك استيراد تقويم واجباتك مباشرة من مودل جامعة مؤتة:
+        </p>
+        <ol class="steps-list">
+          <li>افتح منصة التعليم الإلكتروني أعلاه وسجل الدخول بحسابك.</li>
+          <li>ادخل إلى <strong>التقويم (Calendar)</strong> ثم اضغط <strong>تصدير التقويم (Export calendar)</strong>.</li>
+          <li>اختر <strong>All events</strong> و <strong>This month / Recent and next 60 days</strong> ثم اضغط <strong>Export</strong> لتحميل ملف <code>.ics</code> على هاتفك.</li>
+          <li>ارفع الملف هنا ليضيف التطبيق كل الواجبات الجديدة ومواعيد تسليمها فوراً!</li>
+        </ol>
+        <input id="ics-file-input" type="file" accept=".ics,text/calendar" />
+        <button id="import-ics-btn" class="btn btn-primary">استيراد الواجبات من ملف مودل (.ics)</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📢 لصق إعلان جديد من المادة</span></div>
+        <form id="quick-announce-form">
+          <input id="ann-course" type="text" required placeholder="اسم المادة (مثال: تفاضل وتكامل)" />
+          <textarea id="ann-text" rows="3" required placeholder="الصق نص الإعلان الذي نشره الدكتور على Moodle..."></textarea>
+          <button type="submit" class="btn btn-ghost">إضافة الإعلان وإرسال تنبيه</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 4. ALERTS & NOTIFICATIONS -->
+    <section id="view-alerts" class="view">
+      <div class="card">
+        <div class="card-title">
+          <span>🔔 مركز التنبيهات والإشعارات</span>
+          <button id="mark-all-read-btn" class="btn btn-ghost btn-sm">تحديد الكل كمقروء</button>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);margin-bottom:12px">
+          تظهر هنا التنبيهات عند وجود واجبات أو إعلانات جديدة أو عند اقتراب موعد تسليم واجب خلال 24 ساعة.
+        </p>
+        <div id="alerts-list"></div>
+      </div>
+    </section>
+
+    <!-- 5. SETTINGS & BACKUP -->
+    <section id="view-settings" class="view">
+      <div class="card">
+        <div class="card-title"><span>👤 بيانات الطالب</span></div>
+        <form id="profile-form">
+          <label>اسم الطالب</label>
+          <input id="p-name" type="text" placeholder="اسمك الكامل" />
+          <label>الكلية / التخصص في جامعة مؤتة</label>
+          <input id="p-major" type="text" placeholder="مثال: تكنولوجيا المعلومات - علم الحاسوب" />
+          <button type="submit" class="btn btn-primary">حفظ البيانات</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>💾 النسخ الاحتياطي وإدارة البيانات</span></div>
+        <div class="row-2" style="margin-bottom:10px">
+          <button id="export-json-btn" class="btn btn-ghost">تصدير نسخة احتياطية</button>
+          <label class="btn btn-ghost" style="margin:0;cursor:pointer">
+            استيراد نسخة
+            <input id="import-json-input" type="file" accept=".json" hidden />
+          </label>
+        </div>
+        <button id="reset-demo-btn" class="btn btn-danger">مسح كل البيانات</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-tab="dashboard"><span class="ico">📊</span><span>الرئيسية</span></button>
+    <button class="nav-btn" data-tab="tasks"><span class="ico">✅</span><span>الواجبات</span></button>
+    <button class="nav-btn" data-tab="mutah"><span class="ico">🏛️</span><span>مؤتة LMS</span></button>
+    <button class="nav-btn" data-tab="alerts"><span class="ico">🔔</span><span>التنبيهات</span></button>
+    <button class="nav-btn" data-tab="settings"><span class="ico">⚙️</span><span>الإعدادات</span></button>
+  </nav>
+
+  <script>
+    const STORAGE_KEY = 'student_mu_mutah_v1';
+
+    function defaultData() {
+      const tomorrow = new Date(Date.now() + 18 * 3600 * 1000).toISOString().slice(0, 16);
+      const threeDays = new Date(Date.now() + 72 * 3600 * 1000).toISOString().slice(0, 16);
+      return {
+        profile: { name: 'طالب جامعة مؤتة', major: 'كلية تكنولوجيا المعلومات' },
+        tasks: [
+          {
+            id: 'demo-1',
+            uid: 'demo-1',
+            title: 'تسليم واجب هياكل البيانات (Linked List)',
+            course: 'هياكل البيانات',
+            type: 'واجب',
+            due: tomorrow,
+            notes: 'رفع ملف main.cpp على منصة Moodle مؤتة',
+            done: false,
+            isNew: true,
+            createdAt: Date.now()
+          },
+          {
+            id: 'demo-2',
+            uid: 'demo-2',
+            title: 'كويز قصير في الفصل الثالث',
+            course: 'تفاضل وتكامل 2',
+            type: 'كويز',
+            due: threeDays,
+            notes: 'المراجعة من ملخص المحاضرة',
+            done: false,
+            isNew: true,
+            createdAt: Date.now() - 3600000
+          },
+          {
+            id: 'demo-3',
+            uid: 'demo-3',
+            title: 'إعلان: تأجيل محاضرة المختبر ليوم الأربعاء',
+            course: 'برمجة C++',
+            type: 'إعلان',
+            due: '',
+            notes: 'تم النشر على التعليم الإلكتروني',
+            done: true,
+            isNew: false,
+            createdAt: Date.now() - 86400000
+          }
+        ],
+        alerts: [
+          {
+            id: 'al-1',
+            title: 'واجب جديد: تسليم واجب هياكل البيانات',
+            body: 'الموعد قريب خلال أقل من 24 ساعة — يرجى المتابعة على منصة مؤتة.',
+            read: false,
+            createdAt: Date.now()
+          }
+        ],
+        notifiedDeadlines: []
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          const init = defaultData();
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(init));
+          return init;
+        }
+        return JSON.parse(raw);
+      } catch {
+        return defaultData();
+      }
+    }
+
+    let state = loadState();
+    let currentFilter = 'all';
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function esc(str = '') {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function pushAlert(title, body, fireBrowserNotif = true) {
+      state.alerts.unshift({
+        id: 'al-' + Date.now() + Math.random().toString(16).slice(2, 6),
+        title,
+        body,
+        read: false,
+        createdAt: Date.now()
+      });
+      if (state.alerts.length > 60) state.alerts = state.alerts.slice(0, 60);
+      saveState();
+      showToast('🔔 ' + title);
+      if (fireBrowserNotif && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('Student Mu🎓 - جامعة مؤتة', { body: title + ' — ' + body });
+      }
+    }
+
+    function getDeadlineInfo(dueStr, done) {
+      if (!dueStr) return { text: 'بدون موعد محدد', cls: 'tag-course', urgent: false, diffMs: Infinity };
+      const diffMs = new Date(dueStr).getTime() - Date.now();
+      if (done) return { text: 'تم التسليم ✅', cls: 'tag-ok', urgent: false, diffMs };
+      if (diffMs <= 0) return { text: 'انتهى الموعد ⏰', cls: 'tag-urgent', urgent: true, diffMs };
+
+      const hours = Math.floor(diffMs / 3600000);
+      const mins = Math.floor((diffMs % 3600000) / 60000);
+      const days = Math.floor(hours / 24);
+      const remH = hours % 24;
+
+      if (hours < 24) {
+        return { text: `متبقي ${hours} س و ${mins} د`, cls: 'tag-urgent', urgent: true, diffMs };
+      }
+      if (days <= 3) {
+        return { text: `متبقي ${days} يوم و ${remH} س`, cls: 'tag-soon', urgent: false, diffMs };
+      }
+      return { text: `متبقي ${days} يوم`, cls: 'tag-ok', urgent: false, diffMs };
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + tab)?.classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderAll();
+    }
+    window.switchTab = switchTab;
+
+    function renderTaskCard(t) {
+      const dl = getDeadlineInfo(t.due, t.done);
+      const dueFormatted = t.due ? new Date(t.due).toLocaleString('ar-JO', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+      return `
+        <div class="task-item ${t.done ? 'done' : ''}">
+          <div class="task-top">
+            <div class="task-check-wrap">
+              <button class="check-circle ${t.done ? 'checked' : ''}" data-toggle-id="${t.id}" aria-label="إنجاز">
+                ${t.done ? '✓' : ''}
+              </button>
+              <div>
+                <div class="task-title">${esc(t.title)}</div>
+                ${t.notes ? `<div style="font-size:0.82rem;color:var(--muted);margin-top:3px">${esc(t.notes)}</div>` : ''}
+              </div>
+            </div>
+            <button class="btn btn-danger btn-sm" data-del-id="${t.id}">حذف</button>
+          </div>
+          <div class="task-meta">
+            <span class="tag tag-course">${esc(t.course)}</span>
+            <span class="tag">${esc(t.type)}</span>
+            ${t.isNew && !t.done ? `<span class="tag tag-new">جديد 🆕</span>` : ''}
+            ${t.due ? `<span class="tag ${dl.cls}">${dl.text}</span>` : ''}
+            ${dueFormatted ? `<span>📅 ${dueFormatted}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAll() {
+      const total = state.tasks.length;
+      const doneCount = state.tasks.filter(t => t.done).length;
+      const remaining = total - doneCount;
+      const urgentCount = state.tasks.filter(t => !t.done && getDeadlineInfo(t.due, false).urgent).length;
+      const unreadAlerts = state.alerts.filter(a => !a.read).length;
+
+      document.getElementById('stat-remaining').textContent = remaining;
+      document.getElementById('stat-done').textContent = doneCount;
+      document.getElementById('stat-urgent').textContent = urgentCount;
+      document.getElementById('stat-new').textContent = unreadAlerts;
+
+      const badge = document.getElementById('header-alert-badge');
+      badge.textContent = unreadAlerts;
+      badge.classList.toggle('hidden', unreadAlerts === 0);
+
+      const pct = total ? Math.round((doneCount / total) * 100) : 0;
+      document.getElementById('progress-label').textContent = `${doneCount} من ${total} مهمة منجزة`;
+      document.getElementById('progress-percent').textContent = pct + '%';
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('student-badge').textContent = state.profile.name || 'جامعة مؤتة';
+
+      // Next Deadline
+      const upcoming = state.tasks
+        .filter(t => !t.done && t.due)
+        .sort((a, b) => new Date(a.due) - new Date(b.due))[0];
+      const nextBox = document.getElementById('next-deadline-body');
+      if (upcoming) {
+        const dl = getDeadlineInfo(upcoming.due, false);
+        nextBox.innerHTML = `
+          <strong>${esc(upcoming.title)}</strong>
+          <div style="font-size:0.84rem;color:var(--muted)">المادة: ${esc(upcoming.course)}</div>
+          <span class="countdown-text">${dl.text}</span>
+        `;
+      } else {
+        nextBox.textContent = 'ممتاز! لا توجد مواعيد تسليم معلقة حالياً 🎉';
+      }
+
+      // Latest on Dashboard
+      const latest = state.tasks.slice(0, 4);
+      document.getElementById('dash-latest-list').innerHTML = latest.length
+        ? latest.map(renderTaskCard).join('')
+        : '<p style="color:var(--muted)">أضف واجباتك أو استوردها من منصة جامعة مؤتة.</p>';
+
+      // Tasks Page Filtered
+      let filtered = state.tasks;
+      if (currentFilter === 'remaining') filtered = state.tasks.filter(t => !t.done);
+      else if (currentFilter === 'done') filtered = state.tasks.filter(t => t.done);
+      else if (currentFilter === 'new') filtered = state.tasks.filter(t => t.isNew && !t.done);
+      else if (currentFilter === 'urgent') filtered = state.tasks.filter(t => !t.done && getDeadlineInfo(t.due, false).urgent);
+
+      document.getElementById('tasks-list').innerHTML = filtered.length
+        ? filtered.map(renderTaskCard).join('')
+        : '<p style="color:var(--muted);text-align:center;padding:12px">لا توجد مهام في هذا التصنيف.</p>';
+
+      // Alerts Page
+      document.getElementById('alerts-list').innerHTML = state.alerts.length
+        ? state.alerts.map(a => `
+          <div class="task-item" style="${a.read ? 'opacity:0.65' : 'border-color:rgba(56,189,248,0.45)'}">
+            <div style="display:flex;justify-content:space-between;gap:8px">
+              <strong>${a.read ? '🔔' : '🆕'} ${esc(a.title)}</strong>
+              <small style="color:var(--muted)">${new Date(a.createdAt).toLocaleTimeString('ar-JO', { hour: '2-digit', minute: '2-digit' })}</small>
+            </div>
+            <div style="font-size:0.84rem;color:var(--muted);margin-top:4px">${esc(a.body)}</div>
+          </div>
+        `).join('')
+        : '<p style="color:var(--muted)">لا توجد تنبيهات حالياً.</p>';
+
+      // Profile Inputs
+      document.getElementById('p-name').value = state.profile.name || '';
+      document.getElementById('p-major').value = state.profile.major || '';
+
+      bindDynamicButtons();
+    }
+
+    function bindDynamicButtons() {
+      document.querySelectorAll('[data-toggle-id]').forEach(btn => {
+        btn.onclick = () => {
+          const t = state.tasks.find(x => x.id === btn.dataset.toggleId);
+          if (!t) return;
+          t.done = !t.done;
+          t.isNew = false;
+          saveState();
+          renderAll();
+        };
+      });
+      document.querySelectorAll('[data-del-id]').forEach(btn => {
+        btn.onclick = () => {
+          state.tasks = state.tasks.filter(x => x.id !== btn.dataset.delId);
+          saveState();
+          renderAll();
+        };
+      });
+    }
+
+    // Parse Moodle ICS File
+    function parseIcsDate(val) {
+      if (!val) return '';
+      const clean = val.trim();
+      const m = clean.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/);
+      if (!m) return '';
+      const [, y, mo, d, h = '23', mi = '59', s = '00', isUtc] = m;
+      const dt = isUtc
+        ? new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s))
+        : new Date(+y, +mo - 1, +d, +h, +mi, +s);
+      const pad = n => String(n).padStart(2, '0');
+      return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+    }
+
+    function importMoodleIcs(icsText) {
+      const unfolded = icsText.replace(/\r?\n[ \t]/g, '');
+      const blocks = unfolded.split('BEGIN:VEVENT').slice(1);
+      let added = 0;
+
+      for (const block of blocks) {
+        const body = block.split('END:VEVENT')[0];
+        const getField = (name) => {
+          const match = body.match(new RegExp(`^${name}(?:;[^:]*)?:(.*)$`, 'm'));
+          return match ? match[1].replace(/\\n/g, ' ').replace(/\\,/g, ',').trim() : '';
+        };
+        const uid = getField('UID') || getField('SUMMARY') + getField('DTSTART');
+        const summary = getField('SUMMARY');
+        const course = getField('CATEGORIES') || 'مادة من Moodle';
+        const due = parseIcsDate(getField('DTEND') || getField('DTSTART'));
+        const desc = getField('DESCRIPTION').slice(0, 140);
+
+        if (!summary) continue;
+        const exists = state.tasks.some(t => t.uid === uid);
+        if (!exists) {
+          state.tasks.unshift({
+            id: 'ics-' + Date.now() + Math.random().toString(16).slice(2, 6),
+            uid,
+            title: summary,
+            course,
+            type: summary.toLowerCase().includes('quiz') ? 'كويز' : 'واجب',
+            due,
+            notes: desc || 'مستورد من تقويم منصة جامعة مؤتة',
+            done: false,
+            isNew: true,
+            createdAt: Date.now()
+          });
+          added++;
+        }
+      }
+
+      if (added > 0) {
+        pushAlert(`تم استيراد ${added} واجب/موعد جديد من مودل مؤتة`, 'افتح قائمة الواجبات لمراجعة مواعيد التسليم.');
+        saveState();
+        renderAll();
+        switchTab('tasks');
+      } else {
+        showToast('لم يتم العثور على واجبات جديدة غير مضافة مسبقاً.');
+      }
+    }
+
+    // Periodic Deadline Watcher
+    function checkDeadlines() {
+      let changed = false;
+      for (const t of state.tasks) {
+        if (t.done || !t.due) continue;
+        const diff = new Date(t.due).getTime() - Date.now();
+        if (diff > 0 && diff <= 24 * 3600 * 1000 && !state.notifiedDeadlines.includes(t.id)) {
+          state.notifiedDeadlines.push(t.id);
+          pushAlert(`تذكير عاجل: ${t.title}`, `الموعد خلال أقل من 24 ساعة (${t.course})`);
+          changed = true;
+        }
+      }
+      if (changed) renderAll();
+    }
+
+    // Event Listeners
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    document.getElementById('alerts-jump-btn').addEventListener('click', () => switchTab('alerts'));
+
+    document.getElementById('enable-notif-btn').addEventListener('click', async () => {
+      if (!('Notification' in window)) return showToast('المتصفح لا يدعم الإشعارات');
+      const perm = await Notification.requestPermission();
+      showToast(perm === 'granted' ? 'تم تفعيل إشعارات Chrome بنجاح 🔔' : 'يرجى السماح بالإشعارات من إعدادات Chrome');
+    });
+
+    document.getElementById('task-filters').addEventListener('click', e => {
+      if (!e.target.dataset.filter) return;
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentFilter = e.target.dataset.filter;
+      renderAll();
+    });
+
+    document.getElementById('add-task-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('t-title').value.trim();
+      const course = document.getElementById('t-course').value.trim();
+      const type = document.getElementById('t-type').value;
+      const due = document.getElementById('t-due').value;
+      const notes = document.getElementById('t-notes').value.trim();
+
+      const item = {
+        id: 't-' + Date.now(),
+        uid: 't-' + Date.now(),
+        title, course, type, due, notes,
+        done: false,
+        isNew: true,
+        createdAt: Date.now()
+      };
+      state.tasks.unshift(item);
+      pushAlert(`${type} جديد في ${course}`, title);
+      e.target.reset();
+      saveState();
+      renderAll();
+    });
+
+    document.getElementById('quick-announce-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const course = document.getElementById('ann-course').value.trim();
+      const text = document.getElementById('ann-text').value.trim();
+      state.tasks.unshift({
+        id: 'ann-' + Date.now(),
+        uid: 'ann-' + Date.now(),
+        title: `إعلان: ${text.slice(0, 60)}${text.length > 60 ? '...' : ''}`,
+        course,
+        type: 'إعلان',
+        due: '',
+        notes: text,
+        done: false,
+        isNew: true,
+        createdAt: Date.now()
+      });
+      pushAlert(`إعلان جديد في ${course}`, text.slice(0, 80));
+      e.target.reset();
+      saveState();
+      renderAll();
+      switchTab('tasks');
+    });
+
+    document.getElementById('import-ics-btn').addEventListener('click', async () => {
+      const file = document.getElementById('ics-file-input').files?.[0];
+      if (!file) return showToast('اختر ملف .ics الذي حملته من مودل أولاً');
+      const text = await file.text();
+      importMoodleIcs(text);
+    });
+
+    document.getElementById('mark-all-read-btn').addEventListener('click', () => {
+      state.alerts.forEach(a => a.read = true);
+      state.tasks.forEach(t => t.isNew = false);
+      saveState();
+      renderAll();
+    });
+
+    document.getElementById('profile-form').addEventListener('submit', e => {
+      e.preventDefault();
+      state.profile.name = document.getElementById('p-name').value.trim() || 'طالب جامعة مؤتة';
+      state.profile.major = document.getElementById('p-major').value.trim();
+      saveState();
+      renderAll();
+      showToast('تم حفظ بياناتك ✅');
+    });
+
+    document.getElementById('export-json-btn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'student-mu-backup.json';
+      a.click();
+    });
+
+    document.getElementById('import-json-input').addEventListener('change', async e => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      try {
+        const data = JSON.parse(await file.text());
+        if (Array.isArray(data.tasks)) {
+          state = data;
+          saveState();
+          renderAll();
+          showToast('تم استرجاع النسخة الاحتياطية ✅');
+        }
+      } catch {
+        showToast('ملف النسخة الاحتياطية غير صالح');
+      }
+    });
+
+    document.getElementById('reset-demo-btn').addEventListener('click', () => {
+      if (!confirm('هل تريد مسح جميع الواجبات والتنبيهات؟')) return;
+      state = { profile: state.profile, tasks: [], alerts: [], notifiedDeadlines: [] };
+      saveState();
+      renderAll();
+      showToast('تم مسح البيانات');
+    });
+
+    renderAll();
+    checkDeadlines();
+    setInterval(() => { renderAll(); checkDeadlines(); }, 30000);
+  </script>
+</body>
+</html>
