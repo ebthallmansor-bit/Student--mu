@@ -663,8 +663,17 @@
     <button class="nav-btn" data-tab="alerts"><span class="ico">🔔</span><span>التنبيهات</span></button>
     <button class="nav-btn" data-tab="settings"><span class="ico">⚙️</span><span>الإعدادات</span></button>
   </nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://oltxgksqkqfjzliczoxg.supabase.co';
 
-  <script>
+const SUPABASE_KEY = 'sb_publishable_gW-d5tNF9kSsFlZjb7auTA_vfW_q8Yf';
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
     const STORAGE_KEY = 'student_mu_mutah_v1';
 
     function defaultData() {
